@@ -36,7 +36,7 @@ exports.PokeWorld = class extends colyseus.Room {
   }
 */
   onMessage(player, data) {
-    //console.log("ON MESSAGE");
+    //console.log("ON MESSAGE1");
 
     if (data.event === "Key_Press") {
       console.log(data);
