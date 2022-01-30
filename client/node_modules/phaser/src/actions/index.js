@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -10,6 +10,7 @@
 
 module.exports = {
 
+    AlignTo: require('./AlignTo'),
     Angle: require('./Angle'),
     Call: require('./Call'),
     GetFirst: require('./GetFirst'),
@@ -47,6 +48,9 @@ module.exports = {
     SetScale: require('./SetScale'),
     SetScaleX: require('./SetScaleX'),
     SetScaleY: require('./SetScaleY'),
+    SetScrollFactor: require('./SetScrollFactor'),
+    SetScrollFactorX: require('./SetScrollFactorX'),
+    SetScrollFactorY: require('./SetScrollFactorY'),
     SetTint: require('./SetTint'),
     SetVisible: require('./SetVisible'),
     SetX: require('./SetX'),

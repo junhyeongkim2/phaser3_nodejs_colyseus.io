@@ -72,3 +72,18 @@ app.get("/write", (req, res) => {
     client.close();
   });
 });
+
+//mongo db read 라우트 - junhyeong pizza를 collection에서 찾아서 cursor에 넣어주고 배열화 시켜서 console.log를 찍어준다
+app.get("/read", (req, res) => {
+  client.connect(async (err) => {
+    const collection = client.db("singmeta").collection("singmeta");
+    const cursor = collection.find({});
+    const allValues = await cursor.toArray();
+
+    // perform actions on the collection object
+
+    client.close();
+
+    res.send(allValues);
+  });
+});

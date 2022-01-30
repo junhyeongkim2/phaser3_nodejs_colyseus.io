@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -9,7 +9,7 @@ var AdvanceKeyCombo = require('./AdvanceKeyCombo');
 /**
  * Used internally by the KeyCombo class.
  *
- * @function Phaser.Input.Keyboard.KeyCombo.ProcessKeyCombo
+ * @function Phaser.Input.Keyboard.ProcessKeyCombo
  * @private
  * @since 3.0.0
  *

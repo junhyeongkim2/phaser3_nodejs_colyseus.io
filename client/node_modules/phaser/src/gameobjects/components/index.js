@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -11,7 +11,7 @@
 module.exports = {
 
     Alpha: require('./Alpha'),
-    Animation: require('./Animation'),
+    AlphaSingle: require('./AlphaSingle'),
     BlendMode: require('./BlendMode'),
     ComputedSize: require('./ComputedSize'),
     Crop: require('./Crop'),

@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -18,6 +18,7 @@ module.exports = {
     RotateLeft: require('./RotateLeft'),
     RotateMatrix: require('./RotateMatrix'),
     RotateRight: require('./RotateRight'),
+    Translate: require('./TranslateMatrix'),
     TransposeMatrix: require('./TransposeMatrix')
 
 };

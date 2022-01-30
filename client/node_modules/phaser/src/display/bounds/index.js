@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -12,6 +12,7 @@ module.exports = {
 
     CenterOn: require('./CenterOn'),
     GetBottom: require('./GetBottom'),
+    GetBounds: require('./GetBounds'),
     GetCenterX: require('./GetCenterX'),
     GetCenterY: require('./GetCenterY'),
     GetLeft: require('./GetLeft'),
@@ -25,5 +26,5 @@ module.exports = {
     SetLeft: require('./SetLeft'),
     SetRight: require('./SetRight'),
     SetTop: require('./SetTop')
-    
+
 };

@@ -1,3 +1,18 @@
+
+# [2.3.0](https://github.com/darrachequesne/notepack/compare/2.2.0...v2.3.0) (2020-03-15)
+
+
+### Performance Improvements
+
+* **decode:** add a cache for buffer-to-string conversions ([3c0e5a6](https://github.com/darrachequesne/notepack/commit/3c0e5a66332e50ce31749f0159a533156edbdd3d))
+* **encode:** add a cache for string-to-buffer conversions ([60e8b0b](https://github.com/darrachequesne/notepack/commit/60e8b0b4b16b05e702334fe731df1ec43d1a9f14))
+
+
+
+# [2.2.0](https://github.com/darrachequesne/notepack/compare/2.1.3...2.2.0) (2018-12-18)
+
+
+
 <a name="2.1.3"></a>
 ## [2.1.3](https://github.com/darrachequesne/notepack/compare/2.1.2...2.1.3) (2018-05-14)
 

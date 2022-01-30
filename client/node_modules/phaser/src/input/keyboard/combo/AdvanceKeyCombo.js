@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -8,7 +8,7 @@
  * Used internally by the KeyCombo class.
  * Return `true` if it reached the end of the combo, `false` if not.
  *
- * @function Phaser.Input.Keyboard.KeyCombo.AdvanceKeyCombo
+ * @function Phaser.Input.Keyboard.AdvanceKeyCombo
  * @private
  * @since 3.0.0
  *

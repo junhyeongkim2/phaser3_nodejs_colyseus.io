@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -22,6 +22,7 @@ Rectangle.FitOutside = require('./FitOutside');
 Rectangle.Floor = require('./Floor');
 Rectangle.FloorAll = require('./FloorAll');
 Rectangle.FromPoints = require('./FromPoints');
+Rectangle.FromXY = require('./FromXY');
 Rectangle.GetAspectRatio = require('./GetAspectRatio');
 Rectangle.GetCenter = require('./GetCenter');
 Rectangle.GetPoint = require('./GetPoint');

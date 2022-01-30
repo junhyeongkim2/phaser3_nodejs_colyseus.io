@@ -1,6 +1,6 @@
 /**
  * @author       Richard Davey <rich@photonstorm.com>
- * @copyright    2019 Photon Storm Ltd.
+ * @copyright    2020 Photon Storm Ltd.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
@@ -15,7 +15,11 @@ module.exports = {
     GetCircleToCircle: require('./GetCircleToCircle'),
     GetCircleToRectangle: require('./GetCircleToRectangle'),
     GetLineToCircle: require('./GetLineToCircle'),
+    GetLineToLine: require('./GetLineToLine'),
+    GetLineToPoints: require('./GetLineToPoints'),
+    GetLineToPolygon: require('./GetLineToPolygon'),
     GetLineToRectangle: require('./GetLineToRectangle'),
+    GetRaysFromPointToPolygon: require('./GetRaysFromPointToPolygon'),
     GetRectangleIntersection: require('./GetRectangleIntersection'),
     GetRectangleToRectangle: require('./GetRectangleToRectangle'),
     GetRectangleToTriangle: require('./GetRectangleToTriangle'),

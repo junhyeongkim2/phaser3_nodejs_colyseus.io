@@ -46,6 +46,31 @@ function utf8Length(str) {
   return length;
 }
 
+const cache = new Map();
+const cacheMaxSize = process.env.NOTEPACK_ENCODE_CACHE_MAX_SIZE || 1024;
+
+/*jshint latedef: nofunc */
+function encodeKey(bytes, defers, key) {
+  if (cache.has(key)) {
+    const buffer = cache.get(key);
+    defers.push({ bin: buffer, length: buffer.length, offset: bytes.length });
+    return buffer.length;
+  }
+  if (cache.size > cacheMaxSize) {
+    return _encode(bytes, defers, key);
+  }
+  const keyBytes = [];
+  const size = _encode(keyBytes, [], key);
+  const keyBuffer = Buffer.allocUnsafe(size);
+  for (let i = 0, l = keyBytes.length; i < l; i++) {
+    keyBuffer[i] = keyBytes[i];
+  }
+  utf8Write(keyBuffer, keyBytes.length, key);
+  defers.push({ bin: keyBuffer, length: size, offset: bytes.length });
+  cache.set(key, keyBuffer);
+  return size;
+}
+
 function _encode(bytes, defers, value) {
   let hi = 0, lo = 0, length = 0, size = 0;
 
@@ -242,7 +267,7 @@ function _encode(bytes, defers, value) {
 
       for (let i = 0; i < length; i++) {
         key = keys[i];
-        size += _encode(bytes, defers, key);
+        size += encodeKey(bytes, defers, key);
         size += _encode(bytes, defers, value[key]);
       }
       return size;
@@ -269,37 +294,40 @@ function encode(value) {
   let defer, deferLength = 0, offset = 0;
   for (let i = 0, l = bytes.length; i < l; i++) {
     buf[deferWritten + i] = bytes[i];
-    if (i + 1 !== nextOffset) { continue; }
-    defer = defers[deferIndex];
-    deferLength = defer.length;
-    offset = deferWritten + nextOffset;
-    if (defer.bin) {
-      if (deferLength > MICRO_OPT_LEN) {
-        defer.bin.copy(buf, offset, 0, deferLength);
-      } else {
-        const bin = defer.bin;
-        for (let j = 0; j < deferLength; j++) {
-          buf[offset + j] = bin[j];
+    while (i + 1 === nextOffset) {
+      defer = defers[deferIndex];
+      deferLength = defer.length;
+      offset = deferWritten + nextOffset;
+      if (defer.bin) {
+        if (deferLength > MICRO_OPT_LEN) {
+          defer.bin.copy(buf, offset, 0, deferLength);
+        } else {
+          const bin = defer.bin;
+          for (let j = 0; j < deferLength; j++) {
+            buf[offset + j] = bin[j];
+          }
+        }
+      } else if (defer.str) {
+        if (deferLength > MICRO_OPT_LEN) {
+          buf.write(defer.str, offset, deferLength, 'utf8');
+        } else {
+          utf8Write(buf, offset, defer.str);
+        }
+      } else if (defer.float !== undefined) {
+        buf.writeDoubleBE(defer.float, offset);
+      } else if (defer.arraybuffer) {
+        const arr = new Uint8Array(defer.arraybuffer);
+        for (let k = 0; k < deferLength; k++) {
+          buf[offset + k] = arr[k];
         }
       }
-    } else if (defer.str) {
-      if (deferLength > MICRO_OPT_LEN) {
-        buf.write(defer.str, offset, deferLength, 'utf8');
+      deferIndex++;
+      deferWritten += deferLength;
+      if (defers[deferIndex]) {
+        nextOffset = defers[deferIndex].offset;
       } else {
-        utf8Write(buf, offset, defer.str);
+        break;
       }
-    } else if (defer.float !== undefined) {
-      buf.writeDoubleBE(defer.float, offset);
-    } else if (defer.arraybuffer) {
-      const arr = new Uint8Array(defer.arraybuffer);
-      for (let k = 0; k < deferLength; k++) {
-        buf[offset + k] = arr[k];
-      }
-    }
-    deferIndex++;
-    deferWritten += deferLength;
-    if (defers[deferIndex]) {
-      nextOffset = defers[deferIndex].offset;
     }
   }
   return buf;

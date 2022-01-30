@@ -1,6 +1,7 @@
 const colyseus = require("colyseus");
 
 const players = {};
+var axios = require("axios");
 
 exports.PokeWorld = class extends colyseus.Room {
   onCreate(options) {
@@ -38,9 +39,8 @@ exports.PokeWorld = class extends colyseus.Room {
   onMessage(player, data) {
     //console.log("ON MESSAGE1");
 
-    if (data.event === "Key_Press") {
+    if (data.event === "Key_Press_A") {
       console.log(data);
-      var axios = require("axios");
 
       var config = {
         method: "get",
@@ -56,6 +56,7 @@ exports.PokeWorld = class extends colyseus.Room {
           console.log(error);
         });
     }
+
     if (data.event === "PLAYER_MOVED") {
       players[player.sessionId].x = data.x;
       players[player.sessionId].y = data.y;

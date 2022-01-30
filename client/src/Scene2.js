@@ -5,6 +5,8 @@ import Player from "./Player";
 import OnlinePlayer from "./OnlinePlayer";
 
 let cursors, socketKey;
+var axios = require("axios");
+var singmetatext = "";
 
 export class Scene2 extends Phaser.Scene {
   constructor() {
@@ -27,28 +29,56 @@ export class Scene2 extends Phaser.Scene {
   }
 
   create() {
-    room.then((room) =>
-      room.onMessage("Key_Press", (message) => {
-        console.log("colyseus test" + message);
-      })
-    );
     this.input.keyboard.on("keydown-A", function (event) {
       room.then((room) =>
         room.send({
-          event: "Key_Press",
-          gametext: "this is local to colyseus server data ",
+          event: "Key_Press_A",
+          gametext: "this is local to colyseus server data_A ",
         })
       );
+
+      room.then((room) => room.onMessage({ event: "Key_Press_A" }));
+
       console.log("Hello from the A!");
     });
 
     this.input.keyboard.on("keydown-S", function (event) {
+      var config = {
+        method: "get",
+        url: "http://localhost:3000/read",
+        headers: {},
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data[0].name));
+          singmetatext = JSON.stringify(response.data[0].name);
+          console.log(singmetatext);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       console.log("Hello from the S!");
     });
     this.input.keyboard.on("keydown-D", function (event) {
       console.log("Hello from the D!");
     });
     this.input.keyboard.on("keydown-F", function (event) {
+      var config = {
+        method: "get",
+        url: "http://localhost:3000/read",
+        headers: {},
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data[0]._id));
+          singmetatext = JSON.stringify(response.data[0]._id);
+          console.log(singmetatext);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       console.log("Hello from the F!");
     });
 
@@ -112,16 +142,6 @@ export class Scene2 extends Phaser.Scene {
 
     // Help text that has a "fixed" position on the screen
 
-    this.add
-      .text(200, 200, "this is singmeta text", {
-        font: "18px monospace",
-        fill: "#000000",
-        padding: { x: 20, y: 20 },
-        backgroundColor: "#ffffff",
-      })
-      .setScrollFactor(0)
-      .setDepth(30);
-
     this.debugGraphics();
 
     this.movementTimer();
@@ -131,6 +151,15 @@ export class Scene2 extends Phaser.Scene {
     // Loop the player update method
     this.player.update(time, delta);
 
+    this.add
+      .text(200, 200, singmetatext, {
+        font: "18px monospace",
+        fill: "#000000",
+        padding: { x: 20, y: 20 },
+        backgroundColor: "#ffffff",
+      })
+      .setScrollFactor(0)
+      .setDepth(30);
     // console.log('PlayerX: ' + this.player.x);
     // console.log('PlayerY: ' + this.player.y);
 

@@ -1,8 +1,12 @@
 'use strict';
 
+const DecodeKeyCache = require('./DecodeKeyCache');
+const cache = new DecodeKeyCache();
+
 function Decoder(buffer) {
   this.offset = 0;
   this.buffer = buffer;
+  this.useKeyCache = false;
 }
 
 Decoder.prototype.array = function (length) {
@@ -16,14 +20,26 @@ Decoder.prototype.array = function (length) {
 Decoder.prototype.map = function (length) {
   let key = '', value = {};
   for (let i = 0; i < length; i++) {
-    key = this.parse();
+    this.useKeyCache = true;
+    key = this.parse(true);
+    this.useKeyCache = false;
     value[key] = this.parse();
   }
   return value;
 };
 
 Decoder.prototype.str = function (length) {
+  if (this.useKeyCache) {
+    const valueFromCache = cache.get(this.buffer, this.offset, length);
+    if (valueFromCache) {
+      this.offset += length;
+      return valueFromCache;
+    }
+  }
   const value = this.buffer.toString('utf8', this.offset, this.offset + length);
+  if (this.useKeyCache) {
+    cache.set(this.buffer, this.offset, length, value);
+  }
   this.offset += length;
   return value;
 };
