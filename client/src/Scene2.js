@@ -5,11 +5,15 @@ import Player from "./Player";
 import OnlinePlayer from "./OnlinePlayer";
 
 import TCRP from "phaser3-rex-plugins/plugins/tcrp.js";
+import RunCommands from "phaser3-rex-plugins/plugins/runcommands.js";
+
+import "regenerator-runtime";
 
 let cursors, socketKey;
 var axios = require("axios");
 var singmetatext = "";
-var recorder = new TCRP.Recorder(Scene2);
+
+var recorder;
 
 export class Scene2 extends Phaser.Scene {
   constructor() {
@@ -17,6 +21,8 @@ export class Scene2 extends Phaser.Scene {
   }
 
   init(data) {
+    recorder = new TCRP.Recorder(Scene2);
+
     // Map data
     this.mapName = data.map;
 
@@ -32,7 +38,11 @@ export class Scene2 extends Phaser.Scene {
   }
 
   create() {
-    this.input.keyboard.on("keydown-A", function (event) {
+    let isRecording = false; // MediaRecorder 변수 생성
+    let mediaRecorder = null; // 녹음 데이터 저장 배열
+    const audioArray = [];
+
+    https: this.input.keyboard.on("keydown-A", function (event) {
       room.then((room) =>
         room.send({
           event: "Key_Press_A",
@@ -63,7 +73,22 @@ export class Scene2 extends Phaser.Scene {
         });
       console.log("Hello from the S!");
     });
-    this.input.keyboard.on("keydown-D", function (event) {
+    this.input.keyboard.on("keydown-D", async function (event) {
+      try {
+        await mediaRecorder.stop();
+        // 녹음이 종료되면, 배열에 담긴 오디오 데이터(Blob)들을 합친다: 코덱도 설정해준다.
+        const blob = new Blob(audioArray, { type: "audio/ogg codecs=opus" });
+        audioArray.splice(0); // 기존 오디오 데이터들은 모두 비워 초기화한다. // Blob 데이터에 접근할 수 있는 주소를 생성한다.
+        const blobURL = window.URL.createObjectURL(blob);
+        this.scene.load.audio(mediaRecorder, blobURL); // urls: an array of file url
+        console.log("audio test");
+        console.log(blobURL);
+        var music = this.scene.sound.add(mediaRecorder, blobURL);
+        music.setSeek(2000); // seek: playback time
+        music.play();
+        console.log("this is music test");
+      } catch {}
+
       console.log("Hello from the D!");
     });
     this.input.keyboard.on("keydown-F", function (event) {
@@ -85,22 +110,19 @@ export class Scene2 extends Phaser.Scene {
       console.log("Hello from the F!");
     });
 
-    this.input.keyboard.on("keydown-SPACE", function (event) {
-      console.log("Hello from the Space Bar!");
+    this.input.keyboard.on("keydown-SPACE", async function (event) {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      await console.log(mediaStream);
+      mediaRecorder = await new MediaRecorder(mediaStream);
+      // 이벤트핸들러: 녹음 데이터 취득 처리
+      mediaRecorder.ondataavailable = (event) => {
+        audioArray.push(event.data); // 오디오 데이터가 취득될 때마다 배열에 담아둔다.
+      };
+      await mediaRecorder.start();
 
-      recorder.start();
-
-      setTimeout(() => {
-        console.log("세 번째 메시지" + recorder.isRecording);
-        recorder.stop();
-        console.log("세 번째 메시지" + recorder.isRecording);
-      }, 2000);
-
-      recorder.addCommand(["firsttest"]);
-
-      var gc = recorder.getCommands();
-
-      console.log("this is record console" + gc);
+      await console.log("Hello from the Space Bar!");
     });
     this.input.keyboard.on(Phaser.Events, function (event) {
       console.log(event.key);

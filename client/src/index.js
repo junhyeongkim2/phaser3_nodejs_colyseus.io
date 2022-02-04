@@ -4,6 +4,7 @@ import { Scene2 } from "./Scene2";
 import TCRPPlugin from "phaser3-rex-plugins/plugins/tcrp-plugin.js";
 
 const Config = {
+  audio: {},
   plugins: {
     global: [
       {
@@ -11,6 +12,7 @@ const Config = {
         plugin: TCRPPlugin,
         start: true,
       },
+
       // ...
     ],
   },
