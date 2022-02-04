@@ -1,8 +1,19 @@
 import Phaser from "phaser";
 import { Scene1 } from "./Scene1";
 import { Scene2 } from "./Scene2";
+import TCRPPlugin from "phaser3-rex-plugins/plugins/tcrp-plugin.js";
 
 const Config = {
+  plugins: {
+    global: [
+      {
+        key: "rexTCRP",
+        plugin: TCRPPlugin,
+        start: true,
+      },
+      // ...
+    ],
+  },
   type: Phaser.AUTO,
   width: 800,
   height: 450,

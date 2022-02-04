@@ -27,6 +27,7 @@
     "axios": "^0.25.0",
     "colyseus.js": "^0.11.7",
     "phaser": "^3.20.1",
+    "phaser3-rex-plugins": "^1.1.66",
     "socket.io-client": "^2.3.0"
   }
 }

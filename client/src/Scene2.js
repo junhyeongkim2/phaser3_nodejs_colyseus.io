@@ -4,9 +4,12 @@ import { onlinePlayers, room } from "./SocketServer";
 import Player from "./Player";
 import OnlinePlayer from "./OnlinePlayer";
 
+import TCRP from "phaser3-rex-plugins/plugins/tcrp.js";
+
 let cursors, socketKey;
 var axios = require("axios");
 var singmetatext = "";
+var recorder = new TCRP.Recorder(Scene2);
 
 export class Scene2 extends Phaser.Scene {
   constructor() {
@@ -82,13 +85,27 @@ export class Scene2 extends Phaser.Scene {
       console.log("Hello from the F!");
     });
 
+    this.input.keyboard.on("keydown-SPACE", function (event) {
+      console.log("Hello from the Space Bar!");
+
+      recorder.start();
+
+      setTimeout(() => {
+        console.log("세 번째 메시지" + recorder.isRecording);
+        recorder.stop();
+        console.log("세 번째 메시지" + recorder.isRecording);
+      }, 2000);
+
+      recorder.addCommand(["firsttest"]);
+
+      var gc = recorder.getCommands();
+
+      console.log("this is record console" + gc);
+    });
     this.input.keyboard.on(Phaser.Events, function (event) {
       console.log(event.key);
     });
 
-    this.input.keyboard.on("keydown-SPACE", function (event) {
-      console.log("Hello from the Space Bar!");
-    });
     this.map = this.make.tilemap({ key: this.mapName });
 
     // Set current map Bounds
