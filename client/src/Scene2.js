@@ -12,7 +12,8 @@ import "regenerator-runtime";
 let cursors, socketKey;
 var axios = require("axios");
 var singmetatext = "";
-
+//var FormData = require("form-data");
+//var fs = require("fs");
 var recorder;
 
 export class Scene2 extends Phaser.Scene {
@@ -51,6 +52,36 @@ export class Scene2 extends Phaser.Scene {
       );
 
       room.then((room) => room.onMessage({ event: "Key_Press_A" }));
+      /*
+      var axios = require("axios");
+
+      var data = new FormData();
+      data.append(
+        "track",
+        fs.createReadStream(
+          "/Users/gimjunhyeong/Downloads/Vaquero Perdido - The Mini Vandals.mp3"
+        )
+      );
+      data.append("title", "1");
+      data.append("singer", "testsinger");
+
+      var config = {
+        method: "post",
+        url: "http://localhost:3005/audio",
+        headers: {
+          ...data.getHeaders(),
+        },
+        data: data,
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+        */
 
       console.log("Hello from the A!");
     });

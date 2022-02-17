@@ -8,6 +8,28 @@
   <body>
     <button>시작/종료</button> <br /><br />
     <audio controls>녹음된 소리를 재생할 audio 엘리먼트</audio>
+
+    <form
+      action="http://localhost:3005/audio"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <div class="form-group">
+        <label>제목</label>
+        <input type="text" class="form-control" name="title" />
+      </div>
+      <div class="form-group">
+        <label>내용</label>
+        <input type="text" class="form-control" name="singer" />
+      </div>
+
+      <div class="form-group">
+        <label>파일 첨부</label>
+        <input type="file" class="form-control" name="track" />
+      </div>
+
+      <button type="submit" class="btn btn-outline-secondary">Submit</button>
+    </form>
   </body>
 
   <script>
@@ -22,6 +44,7 @@
     const audioArray = [];
     $btn.onclick = async function (event) {
       if (!isRecording) {
+        console.log("button clicked");
         // 마이크 mediaStream 생성: Promise를 반환하므로 async/await 사용
         const mediaStream = await navigator.mediaDevices.getUserMedia({
           audio: true,
@@ -29,13 +52,35 @@
         mediaRecorder = new MediaRecorder(mediaStream); // 이벤트핸들러: 녹음 데이터 취득 처리
         mediaRecorder.ondataavailable = (event) => {
           audioArray.push(event.data); // 오디오 데이터가 취득될 때마다 배열에 담아둔다.
+          console.log(event.data);
         }; // 이벤트핸들러: 녹음 종료 처리 & 재생하기
         mediaRecorder.onstop = (event) => {
           // 녹음이 종료되면, 배열에 담긴 오디오 데이터(Blob)들을 합친다: 코덱도 설정해준다.
           const blob = new Blob(audioArray, { type: "audio/ogg codecs=opus" });
           audioArray.splice(0); // 기존 오디오 데이터들은 모두 비워 초기화한다. // Blob 데이터에 접근할 수 있는 주소를 생성한다.
           const blobURL = window.URL.createObjectURL(blob); // audio엘리먼트로 재생한다.
+
           $audioEl.src = blobURL;
+          console.log(
+            "this is audio url !!! = " + blobURL.substr(5, blobURL.length)
+          );
+
+          var formdata = new FormData();
+          formdata.append("track", blob, blobURL);
+          formdata.append("title", "1");
+          formdata.append("singer", "testsinger");
+
+          var requestOptions = {
+            method: "POST",
+            body: formdata,
+            redirect: "follow",
+          };
+
+          fetch("http://localhost:3005/audio", requestOptions)
+            .then((response) => response.text())
+            .then((result) => console.log(result))
+            .catch((error) => console.log("error", error));
+
           $audioEl.play();
         }; // 녹음 시작
         mediaRecorder.start();

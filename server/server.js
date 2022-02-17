@@ -3,7 +3,6 @@ const { MongoClient } = require("mongodb");
 // mongodb 사용자 db와 collection uri 입니다 : 다음에 설정한 비밀번호를 넣으시면 됩니다
 const uri =
   "mongodb+srv://singmeta:0000@cluster0.eqbzf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
 // client에 mongoclient 정의
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
