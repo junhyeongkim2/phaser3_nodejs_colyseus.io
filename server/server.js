@@ -1,3 +1,7 @@
+const WebSocket = require("ws");
+
+const Socket = require("dgram");
+
 const { MongoClient } = require("mongodb");
 
 // mongodb 사용자 db와 collection uri 입니다 : 다음에 설정한 비밀번호를 넣으시면 됩니다
@@ -27,6 +31,39 @@ app.use(express.json());
 const server = http.createServer(app);
 const gameServer = new colyseus.Server({
   server: server,
+});
+
+const wss = new WebSocket.Server({ server });
+
+const sockets = [];
+
+wss.on("connection", (bsocket) => {
+  sockets.push(bsocket);
+  bsocket["nickname"] = "Anon";
+  console.log("Connected to Browser ");
+  bsocket.on("close", () => {
+    console.log("Disconnected from the Browser");
+  });
+  bsocket.on("message", (msg) => {
+    const message = JSON.parse(msg);
+    console.log(message);
+
+    switch (message.type) {
+      case "new_message": {
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${bsocket.nickname}: ${message.payload}`)
+        );
+        break;
+      }
+
+      case "nickname": {
+        console.log(message.type);
+        console.log("nickname " + message.payload);
+        bsocket["nickname"] = message.payload;
+        break;
+      }
+    }
+  });
 });
 
 // register your room handlers
